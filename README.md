@@ -1,8 +1,8 @@
-# 🪺 LostNest — Workplace Lost & Found Management System
+# LostNest — Workplace Lost & Found Management System
 
 <div align="center">
 
-![LostNest Logo](client/public/logo.png)
+<img src="client/public/logo.png" alt="LostNest Logo" width="110" />
 
 ### **Find What Belongs.**
 A modern, centralized corporate Lost & Found management platform built for modern enterprise campuses.
@@ -13,33 +13,33 @@ A modern, centralized corporate Lost & Found management platform built for moder
 [![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-[**Explore Live Demo »**](https://lostnest.vercel.app/) · [Report Bug](https://github.com/SuryaSrekanth/lostnest/issues) · [Request Feature](https://github.com/SuryaSrekanth/lostnest/issues)
+[**Explore Live Demo**](https://lostnest.vercel.app/) · [Report Bug](https://github.com/SuryaSrekanth/lostnest/issues) · [Request Feature](https://github.com/SuryaSrekanth/lostnest/issues)
 
 </div>
 
 ---
 
-## 📌 Overview
+## Overview
 
-Misplaced laptops, charging bricks, access cards, and audio gear are everyday realities in large corporate facilities. **LostNest** replaces chaotic Slack messages and physical lost-and-found bins with a structured, secure, and searchable workplace directory.
+Misplaced laptops, charging bricks, access cards, and audio gear are everyday realities in large corporate facilities. **LostNest** replaces chaotic chat messages and physical lost-and-found bins with a structured, secure, and searchable workplace directory.
 
 Employees can quickly report lost or found belongings, pinpoint exact workplace coordinates (Building, Floor, and Meeting Room/Zone), and verify ownership through an anti-theft proof workflow before any handover takes place.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 📍 **Corporate Coordinate Mapping** — Record items with exact workplace locations (`Building`, `Floor`, and `Room/Zone` e.g., *HQ Building 1 • 3rd Floor • Meeting Room 4B*).
-- 🛡️ **Anti-Theft Claim Verification** — Claiming high-value gear (laptops, phones, AirPods) requires submitting proof notes (stickers, serial numbers, pouch colors) that only the true owner knows.
-- ⏱️ **MongoDB TTL Auto-Purge** — When an item is marked as **Returned & Resolved**, an automated background MongoDB Time-To-Live (TTL) index cleans up the record after 24 hours to preserve database storage and protect employee privacy.
-- 🔍 **Instant Dual-Feed & Filtering** — Toggle between **Lost** and **Found** items, or filter across facilities, item categories, and live keyword searches.
-- 🔐 **Corporate JWT Authentication** — Secure employee accounts with department and campus location metadata stored in MongoDB Atlas.
-- 🎨 **Forest Green Brand Identity** — Custom bird-nest emblem, dark emerald header, high-contrast bright red alert pins, and hardware-accelerated ambient textures with zero scroll lag.
-- 📱 **Fully Responsive** — Optimized for desktops, tablets, and mobile devices across office Wi-Fi networks.
+- **Corporate Coordinate Mapping** — Record items with exact workplace locations (`Building`, `Floor`, and `Room/Zone` e.g., *HQ Building 1 • 3rd Floor • Meeting Room 4B*).
+- **Anti-Theft Claim Verification** — Claiming high-value gear (laptops, phones, AirPods) requires submitting proof notes (stickers, serial numbers, pouch colors) that only the true owner knows.
+- **MongoDB TTL Auto-Purge** — When an item is marked as **Returned & Resolved**, an automated background MongoDB Time-To-Live (TTL) index cleans up the record after 24 hours to preserve database storage and protect employee privacy.
+- **Instant Dual-Feed & Filtering** — Toggle between **Lost** and **Found** items, or filter across facilities, item categories, and live keyword searches.
+- **Corporate JWT Authentication** — Secure employee accounts with department and campus location metadata stored in MongoDB Atlas.
+- **Forest Green Brand Identity** — Custom bird-nest emblem, dark emerald header, high-contrast bright red alert pins, and hardware-accelerated ambient textures with zero scroll lag.
+- **Fully Responsive** — Optimized for desktops, tablets, and mobile devices across office Wi-Fi networks.
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Tech Stack & Architecture
 
 ```
 [ React 19 + Tailwind v4 ]  ──( REST API )──>  [ Express 5 + Node.js ]  ──( Mongoose )──>  [ MongoDB Atlas ]
@@ -59,7 +59,7 @@ Employees can quickly report lost or found belongings, pinpoint exact workplace 
 
 ---
 
-## 🌐 API Reference
+## API Reference
 
 Base URL: `https://lostnest.onrender.com/api` (or `http://localhost:5000/api` locally)
 
@@ -80,7 +80,7 @@ Base URL: `https://lostnest.onrender.com/api` (or `http://localhost:5000/api` lo
 
 ---
 
-## 🚀 Getting Started Locally
+## Getting Started Locally
 
 ### 1. Prerequisites
 - [Node.js](https://nodejs.org/) (v18 or higher)
@@ -129,7 +129,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser!
 
 ---
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 ### Server (`server/.env`)
 | Variable | Description | Example |
@@ -145,7 +145,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser!
 
 ---
 
-## 📁 Project Directory Structure
+## Project Directory Structure
 
 ```
 lostnest/
@@ -175,7 +175,7 @@ lostnest/
 
 ---
 
-## 🔒 Security Best Practices Implemented
+## Security Best Practices Implemented
 
 - **Password Hashing:** Passwords are encrypted using `bcryptjs` with salt rounds before storing in the database.
 - **Credential Protection:** All `.env` and sensitive files are excluded from Git version control.
@@ -184,7 +184,7 @@ lostnest/
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **ISC License**.
 
