@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('D:/Project/lostnest/server/models/User');
-const auth = require('D:/Project/lostnest/server/middleware/auth');
+const User = require('../models/User');
+const auth = require('../middleware/auth');
 
 // ==================================================================================
 // 1. REGISTER NEW EMPLOYEE
