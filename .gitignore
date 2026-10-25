@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment Variables & Secrets (CRITICAL: Never commit to Git/GitHub)
+.env
+.env.local
+.env.*.local
+server/.env
+
+# Build outputs
+client/dist/
+dist/
+
+# OS and logs
+.DS_Store
+Thumbs.db
+*.log
