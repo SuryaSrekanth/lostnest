@@ -184,6 +184,12 @@ lostnest/
 
 ---
 
+## 👤 Author
+
+**Surya Srekanth**
+- **GitHub**: [@SuryaSrekanth](https://github.com/SuryaSrekanth)
+- **Live Project**: [LostNest - Find What Belongs!](https://lostnest.vercel.app)
+
 ## License
 
 This project is licensed under the **ISC License**.
