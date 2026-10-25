@@ -74,10 +74,6 @@ const Footer = () => {
                 <MapPin className="w-3 h-3 text-emerald-400 shrink-0" />
                 Building 2 — Tech Park
               </li>
-              <li className="flex items-center gap-1.5 text-emerald-300">
-                <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
-                Central Security (Ext: 4402)
-              </li>
             </ul>
           </div>
 
