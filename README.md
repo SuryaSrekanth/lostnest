@@ -2,200 +2,362 @@
 
 <div align="center">
 
-<img src="client/public/logo.png" alt="LostNest Logo" width="110" />
+<img src="client/public/logo.png" alt="LostNest Logo" width="115" />
 
-### **Find What Belongs.**
-A modern, centralized corporate Lost & Found management platform built for modern enterprise campuses.
+# **LostNest**
+### *Find What Belongs.*
+
+A modern, centralized corporate Lost & Found management platform engineered for enterprise campuses, tech parks, and workplace facilities.
 
 [![Live App](https://img.shields.io/badge/Live%20App-lostnest.vercel.app-064e3b?style=for-the-badge&logo=vercel&logoColor=white)](https://lostnest.vercel.app/)
 [![API Gateway](https://img.shields.io/badge/API%20Status-Online-10b981?style=for-the-badge&logo=render&logoColor=white)](https://lostnest.onrender.com/api)
-[![MERN Stack](https://img.shields.io/badge/Stack-MERN-blue?style=for-the-badge)](https://www.mongodb.com/)
-[![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![React 19](https://img.shields.io/badge/React%2019-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS_v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express 5](https://img.shields.io/badge/Express%205-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB Atlas](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg?style=for-the-badge)](https://opensource.org/licenses/ISC)
 
-[**Explore Live Demo**](https://lostnest.vercel.app/) · [Report Bug](https://github.com/SuryaSrekanth/lostnest/issues) · [Request Feature](https://github.com/SuryaSrekanth/lostnest/issues)
+[**Explore Live Demo**](https://lostnest.vercel.app/) • [**API Gateway**](https://lostnest.onrender.com/api) • [**Report Bug**](https://github.com/SuryaSrekanth/lostnest/issues) • [**Request Feature**](https://github.com/SuryaSrekanth/lostnest/issues)
+
+<br/>
+
+<img src="client/public/preview.png" alt="LostNest Application Dashboard" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
 
 </div>
 
 ---
 
-## Overview
+## 🧭 Table of Contents
 
-Misplaced laptops, charging bricks, access cards, and audio gear are everyday realities in large corporate facilities. **LostNest** replaces chaotic chat messages and physical lost-and-found bins with a structured, secure, and searchable workplace directory.
-
-Employees can quickly report lost or found belongings, pinpoint exact workplace coordinates (Building, Floor, and Meeting Room/Zone), and verify ownership through an anti-theft proof workflow before any handover takes place.
-
----
-
-## Key Features
-
-- **Corporate Coordinate Mapping** — Record items with exact workplace locations (`Building`, `Floor`, and `Room/Zone` e.g., *HQ Building 1 • 3rd Floor • Meeting Room 4B*).
-- **Anti-Theft Claim Verification** — Claiming high-value gear (laptops, phones, AirPods) requires submitting proof notes (stickers, serial numbers, pouch colors) that only the true owner knows.
-- **MongoDB TTL Auto-Purge** — When an item is marked as **Returned & Resolved**, an automated background MongoDB Time-To-Live (TTL) index cleans up the record after 24 hours to preserve database storage and protect employee privacy.
-- **Instant Dual-Feed & Filtering** — Toggle between **Lost** and **Found** items, or filter across facilities, item categories, and live keyword searches.
-- **Corporate JWT Authentication** — Secure employee accounts with department and campus location metadata stored in MongoDB Atlas.
-- **Forest Green Brand Identity** — Custom bird-nest emblem, dark emerald header, high-contrast bright red alert pins, and hardware-accelerated ambient textures with zero scroll lag.
-- **Fully Responsive** — Optimized for desktops, tablets, and mobile devices across office Wi-Fi networks.
+- [Overview](#-overview)
+- [The Problem & The Solution](#-the-problem--the-solution)
+- [Key Features](#-key-features)
+- [System Architecture & Data Flow](#-system-architecture--data-flow)
+- [Tech Stack](#-tech-stack)
+- [Database Models & TTL Expiration](#-database-models--ttl-expiration)
+- [REST API Reference](#-rest-api-reference)
+- [Getting Started Locally](#-getting-started-locally)
+- [Environment Variables](#-environment-variables)
+- [Security & Production Hardening](#-security--production-hardening)
+- [Deployment](#-deployment)
+- [Contributing & Author](#-author)
 
 ---
 
-## Tech Stack & Architecture
+## 📌 Overview
 
+In large corporate campuses and multi-floor office buildings, misplaced items—such as company laptops, USB-C chargers, access badges, wireless earbuds, and keys—lead to fragmented communication across Slack channels, email threads, and physical security desks.
+
+**LostNest** provides a centralized, secure workplace directory that streamlines the recovery lifecycle:
+1. **Report:** Employees log lost or found items with 3-tier corporate coordinates.
+2. **Discover:** Colleagues browse dual real-time feeds with instant multi-criteria filtering.
+3. **Verify:** Claimants submit confidential proof notes to prevent unauthorized pickups.
+4. **Resolve & Auto-Purge:** Completed handovers trigger an automated 24-hour database TTL cleanup to maintain privacy.
+
+---
+
+## 💡 The Problem & The Solution
+
+| The Traditional Way | The LostNest Way |
+| :--- | :--- |
+| **Scattered chat alerts:** Messages get lost in busy Slack or Microsoft Teams channels. | **Dedicated Central Directory:** Searchable repository categorized by item type, building, and date. |
+| **Vague location descriptions:** "Found a mouse near the 3rd floor lounge." | **3-Tier Workplace Coordinates:** Exact location tracking (`Building` • `Floor` • `Room/Zone`). |
+| **Vulnerable handovers:** Anyone can claim high-value hardware without verification. | **Anti-Theft Proof Verification:** Claimants must submit confidential distinguishing marks (stickers, serials). |
+| **Data clutter & privacy risks:** Old records linger forever on company servers. | **Automated MongoDB TTL Purge:** Documents self-delete 24 hours after resolution. |
+
+---
+
+## ✨ Key Features
+
+- **📍 Corporate Coordinate Mapping**  
+  Every item is recorded with granular office hierarchy (`Building`, `Floor`, and `Room/Zone`, e.g., *HQ Building 1 • 4th Floor • Quiet Pod 4C*).
+  
+- **🛡️ Anti-Theft Claim Verification**  
+  Claiming high-value items requires providing proof notes (e.g., sticker details, case color, engraved initials, serial numbers). Only the reporter and claimant can view these sensitive details.
+
+- **⏳ MongoDB TTL 24-Hour Auto-Purge**  
+  When an item is marked as **Returned & Resolved**, a MongoDB Time-To-Live index (`{ resolvedAt: 1 }, { expireAfterSeconds: 86400 }`) automatically deletes the document after 24 hours to preserve database storage and protect employee data privacy.
+
+- **⚡ Instant Dual-Feed & Smart Filtering**  
+  Toggle between **Lost** and **Found** items, or filter concurrently across facilities, item categories, active/returned statuses, and live keyword queries.
+
+- **🔐 Stateless Corporate JWT Authentication**  
+  Enterprise employee accounts with encrypted credentials (`bcryptjs`) and department/location profiling (`Engineering`, `HR`, `Operations`, `Finance`, etc.).
+
+- **🎨 Forest Green Corporate Brand Identity**  
+  Crafted with an emerald-dark corporate theme, high-contrast alert tags, smooth card hover interactions, and responsive layouts built with Tailwind CSS v4 and Lucide React icons.
+
+---
+
+## 🏗️ System Architecture & Data Flow
+
+```mermaid
+flowchart TD
+    subgraph Client["Frontend (React 19 + Tailwind v4 on Vercel)"]
+        UI["Corporate User Interface"]
+        Feed["Dual Feed (Lost / Found)"]
+        Filter["Filter Bar & Live Search"]
+        Modal["Report & Claim Modals"]
+    end
+
+    subgraph Server["Backend API Gateway (Express 5 on Render)"]
+        Router["Express REST Router (/api)"]
+        AuthMid["JWT Auth Middleware"]
+        ItemCtrl["Item Management Controller"]
+        AuthCtrl["Authentication Controller"]
+    end
+
+    subgraph Database["Database (MongoDB Atlas)"]
+        Users[("User Collection")]
+        Items[("Item Collection")]
+        TTL[("24-Hour TTL Auto-Purge Index")]
+    end
+
+    UI --> Feed & Filter & Modal
+    Feed & Filter & Modal -->|Axios HTTP Requests| Router
+    Router --> AuthMid
+    AuthMid --> ItemCtrl & AuthCtrl
+    AuthCtrl -->|Bcrypt Hashing / Tokens| Users
+    ItemCtrl -->|Mongoose Queries| Items
+    Items -.->|Status: Returned (resolvedAt + 24h)| TTL
 ```
-[ React 19 + Tailwind v4 ]  ──( REST API )──>  [ Express 5 + Node.js ]  ──( Mongoose )──>  [ MongoDB Atlas ]
-   Hosted on Vercel CDN                            Hosted on Render                           Cloud Database
-```
 
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend** | React 19, Vite, Tailwind CSS v4 | High-performance SPA with modern CSS utility framework |
-| **Icons & UI** | Lucide React | Clean, lightweight icon suite |
-| **Routing** | React Router DOM v7 | Client-side routing with Vercel SPA rewrites |
-| **HTTP Client** | Axios | Interceptor-based API client attaching JWT Bearer tokens |
-| **Backend** | Node.js, Express.js 5 | RESTful API service |
-| **Database** | MongoDB Atlas, Mongoose 9 | Cloud document database with TTL expiration indexing |
-| **Auth & Security** | JSON Web Tokens (JWT), Bcrypt.js | Password hashing and stateless session authorization |
-| **Deployment** | Vercel (Frontend) + Render (Backend) | Automated CI/CD pipelines linked to GitHub |
+### **Item Lifecycle Workflow**
+```
+[Report Item] ──> [Active in Feed] ──> [Colleague Submits Claim / Found Note]
+                                                │
+                                                ▼
+[Document Purged via TTL (24h)] <── [Resolved as Returned] <── [Reporter Reviews & Approves]
+```
 
 ---
 
-## API Reference
+## 🛠️ Tech Stack
 
-Base URL: `https://lostnest.onrender.com/api` (or `http://localhost:5000/api` locally)
+### **Frontend**
+- **Framework:** [React 19](https://react.dev/) + [Vite](https://vite.dev/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Routing:** [React Router DOM v7](https://reactrouter.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **HTTP Client:** [Axios](https://axios-http.com/) (configured with JWT request interceptors)
+- **Hosting:** [Vercel](https://vercel.com/) (configured with SPA rewrite rules)
 
+### **Backend**
+- **Runtime:** [Node.js](https://nodejs.org/) (ES6+)
+- **Framework:** [Express.js 5](https://expressjs.com/)
+- **Database ODM:** [Mongoose 9](https://mongoosejs.com/)
+- **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas)
+- **Security:** [JSON Web Tokens (JWT)](https://jwt.io/), [Bcrypt.js](https://github.com/dcodeIO/bcrypt.js), CORS, Regex Query Sanitization
+- **Hosting:** [Render](https://render.com/) (Cloud Web Service)
+
+---
+
+## 🗄️ Database Models & TTL Expiration
+
+### **Item Schema Highlights**
+```javascript
+const itemSchema = new mongoose.Schema({
+  title:        { type: String, required: true, trim: true },
+  description:  { type: String, required: true },
+  type:         { type: String, enum: ['Lost', 'Found'], required: true },
+  category:     { 
+    type: String, 
+    enum: ['Tech & Hardware', 'Badges & Access', 'Audio & Gadgets', 'Personal & Apparel', 'Documents & Wallets', 'Other'],
+    required: true 
+  },
+  building:     { type: String, required: true },
+  floor:        { type: String, required: true },
+  roomZone:     { type: String, required: true },
+  status:       { type: String, enum: ['Active', 'Claim Pending', 'Returned'], default: 'Active' },
+  resolvedAt:   { type: Date, default: null },
+  claimDetails: {
+    claimedBy:    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    claimNote:    { type: String, default: '' },
+    contactPhone: { type: String, default: '' },
+    claimDate:    { type: Date, default: null }
+  },
+  reportedBy:   { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
+
+// ⏱️ Auto-Purge: Removes resolved items from database exactly 24 hours after resolution
+itemSchema.index({ resolvedAt: 1 }, { expireAfterSeconds: 86400 });
+```
+
+---
+
+## 🔌 REST API Reference
+
+**Base URL (Production):** `https://lostnest.onrender.com/api`  
+**Base URL (Local):** `http://localhost:5000/api`
+
+### **1. Authentication Endpoints**
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/` | Public | Server health check |
-| `GET` | `/api` | Public | API Gateway status and endpoint directory |
-| `POST` | `/api/auth/register` | Public | Register a new corporate employee |
-| `POST` | `/api/auth/login` | Public | Authenticate employee and issue JWT token |
-| `GET` | `/api/auth/me` | Protected | Fetch current logged-in employee profile |
-| `GET` | `/api/items` | Public | Retrieve items with query filters (`?type=&category=&building=&search=`) |
-| `GET` | `/api/items/:id` | Public | Get single item details with claimant information |
-| `GET` | `/api/items/user/my-items`| Protected | Get all items reported by current authenticated user |
-| `POST` | `/api/items` | Protected | Submit a new Lost or Found item report |
-| `POST` | `/api/items/:id/claim` | Protected | Submit ownership proof to claim a found item |
-| `PUT` | `/api/items/:id/resolve` | Protected | Mark item as returned (starts 24h auto-purge countdown) |
-| `DELETE`| `/api/items/:id` | Protected | Permanently delete a listing (reporter only) |
+| `POST` | `/auth/register` | Public | Register new employee account |
+| `POST` | `/auth/login` | Public | Authenticate employee and return JWT |
+| `GET` | `/auth/me` | Protected | Retrieve authenticated user profile |
+
+#### **Example: Register Request**
+```json
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane.doe@company.com",
+  "password": "SecurePassword123",
+  "department": "Engineering",
+  "officeLocation": "HQ Building 1",
+  "phone": "+1 555-0199"
+}
+```
+
+### **2. Items Management Endpoints**
+| Method | Endpoint | Access | Description | Query Parameters |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/items` | Public | List items with filters | `type`, `category`, `building`, `status`, `search` |
+| `GET` | `/items/:id` | Public | Get item details by ID | — |
+| `GET` | `/items/user/my-items` | Protected | Fetch current user's reported items | — |
+| `POST` | `/items` | Protected | Report a new Lost or Found item | — |
+| `POST` | `/items/:id/claim` | Protected | Submit claim / found verification | — |
+| `PUT` | `/items/:id/resolve` | Protected | Mark item as returned (starts TTL clock) | — |
+| `DELETE`| `/items/:id` | Protected | Delete listing (Reporter only) | — |
+
+#### **Example: Report Item Request**
+```json
+POST /api/items
+Authorization: Bearer <jwt_token>
+Content-Type: application/json
+
+{
+  "title": "Logitech MX Master 3S Mouse",
+  "description": "Graphite grey color, small scratch near thumb wheel.",
+  "type": "Found",
+  "category": "Tech & Hardware",
+  "building": "HQ Building 1",
+  "floor": "3",
+  "roomZone": "Meeting Room 3B",
+  "contactEmail": "finder@company.com",
+  "contactPhone": "+1 555-0144"
+}
+```
 
 ---
 
-## Getting Started Locally
+## 💻 Getting Started Locally
 
-### 1. Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher)
+### **Prerequisites**
+- [Node.js](https://nodejs.org/) (v18 or newer)
 - [Git](https://git-scm.com/)
-- A free [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster (or local MongoDB)
+- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account (or a local MongoDB instance running on `localhost:27017`)
 
-### 2. Clone the Repository
+---
+
+### **1. Clone the Repository**
 ```bash
 git clone https://github.com/SuryaSrekanth/lostnest.git
 cd lostnest
 ```
 
-### 3. Backend Setup
+---
+
+### **2. Backend Configuration & Setup**
 ```bash
 cd server
 npm install
 ```
 
-Create a `.env` file in the `server` directory:
+Create a `.env` file inside the `server/` directory:
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_atlas_connection_string
-JWT_SECRET=your_secret_jwt_key
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/lostnest?retryWrites=true&w=majority
+JWT_SECRET=your_super_secret_jwt_key_here
 ```
 
-Start the backend:
+Start the backend development server:
 ```bash
-npm run dev   # Starts with nodemon on http://localhost:5000
-# or
-npm start     # Standard node server.js
+npm run dev
 ```
+> The API server will boot up with `nodemon` on **http://localhost:5000**.
 
-### 4. Frontend Setup
-In a new terminal window:
+---
+
+### **3. Frontend Configuration & Setup**
+Open a new terminal window:
 ```bash
 cd client
 npm install
+```
+
+Create a `.env` file inside the `client/` directory (optional for local, defaults to localhost):
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
 
 Start the Vite development server:
 ```bash
 npm run dev
 ```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser!
-
----
-
-## Environment Variables
-
-### Server (`server/.env`)
-| Variable | Description | Example |
-| :--- | :--- | :--- |
-| `PORT` | Express server port | `5000` |
-| `MONGODB_URI` | MongoDB Atlas connection string | `mongodb+srv://user:pass@cluster.mongodb.net/lostnest` |
-| `JWT_SECRET` | Secret key for signing authorization tokens | `any_long_secure_secret_key` |
-
-### Client (`client/.env` or Vercel Environment Variables)
-| Variable | Description | Example |
-| :--- | :--- | :--- |
-| `VITE_API_URL` | Live backend API URL | `https://lostnest.onrender.com/api` |
+> Open your browser and navigate to **http://localhost:5173**.
 
 ---
 
-## Project Directory Structure
+## ⚙️ Environment Variables
 
-```
-lostnest/
-├── client/                     # Frontend React application
-│   ├── public/                 # Static assets (logo.png, favicon.png)
-│   ├── src/
-│   │   ├── components/         # Reusable UI (Navbar, Footer, ItemCard, FilterBar, ClaimModal)
-│   │   ├── context/            # AuthContext (global user state & token storage)
-│   │   ├── pages/              # Home, Login, Register, ReportItem, MyListings
-│   │   ├── services/           # Axios API service instance
-│   │   ├── App.jsx             # Route definitions & layout wrappers
-│   │   ├── index.css           # Tailwind v4 theme configuration
-│   │   └── main.jsx            # React root mount
-│   ├── vercel.json             # Vercel Single-Page-App routing rewrite rules
-│   └── package.json
-│
-├── server/                     # Backend Express REST API
-│   ├── middleware/             # JWT auth verification middleware
-│   ├── models/                 # Mongoose schemas (User.js, Item.js with TTL index)
-│   ├── routes/                 # Express route handlers (auth.js, items.js)
-│   ├── server.js               # Server entry point & MongoDB Atlas connection
-│   └── package.json
-│
-├── .gitignore                  # Prevents secrets, .env files, and node_modules from pushing
-└── README.md
-```
+### **Backend (`server/.env`)**
+| Variable | Required | Description | Example |
+| :--- | :---: | :--- | :--- |
+| `PORT` | No | Port on which Express server listens | `5000` |
+| `MONGODB_URI` | **Yes** | MongoDB connection string (Atlas or Local) | `mongodb+srv://user:pass@cluster.mongodb.net/lostnest` |
+| `JWT_SECRET` | **Yes** | Secret cryptographic key for signing JWTs | `a_long_random_secure_string_here` |
+
+### **Frontend (`client/.env`)**
+| Variable | Required | Description | Example |
+| :--- | :---: | :--- | :--- |
+| `VITE_API_URL` | No | Base URL to the Express backend API gateway | `http://localhost:5000/api` or `https://lostnest.onrender.com/api` |
 
 ---
 
-## Security Best Practices Implemented
+## 🔒 Security & Production Hardening
 
-- **Password Hashing:** Passwords are encrypted using `bcryptjs` with salt rounds before storing in the database.
-- **Credential Protection:** All `.env` and sensitive files are excluded from Git version control.
-- **Access Control:** Deleting and resolving listings can only be executed by the employee who originally reported the item.
-- **Input Sanitization:** Regex-escaped case-insensitive query searching prevents search injection.
+- **Bcrypt Password Encryption:** User passwords are never stored in plaintext; salted with 10 rounds of bcrypt hashing before saving.
+- **Strict Authorization:** Only the original reporter of an item has permission to execute `PUT /api/items/:id/resolve` or `DELETE /api/items/:id`.
+- **Anti-Theft Confidentiality:** Claim notes (which contain sensitive identification details) are protected and restricted to the item reporter and claimant.
+- **Search Injection Defense:** User search inputs are sanitized with escaped regular expressions to prevent query injection attacks.
+- **Repository Hygiene:** All environment configurations, secrets, and local databases are strictly shielded via `.gitignore`.
+
+---
+
+## 🚀 Deployment
+
+- **Frontend on Vercel:**  
+  Configured with `client/vercel.json` rewrite rules to seamlessly handle client-side routing on React Router DOM:
+  ```json
+  {
+    "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  }
+  ```
+- **Backend on Render:**  
+  Configured as a Web Service running `node server.js` with automatic GitHub deployments on pushes to `main`.
+- **Database on MongoDB Atlas:**  
+  Cloud-hosted M0/M10 cluster with automated IP access whitelisting and auto-indexing enabled for TTL purge.
 
 ---
 
 ## 👤 Author
 
 **Surya Srekanth**
-- **GitHub**: [@SuryaSrekanth](https://github.com/SuryaSrekanth)
-- **Live Project**: [LostNest - Find What Belongs!](https://lostnest.vercel.app)
-
-## License
-
-This project is licensed under the **ISC License**.
+- **GitHub:** [@SuryaSrekanth](https://github.com/SuryaSrekanth)
+- **LinkedIn:** [linkedin.com/in/surya-srekanth](https://www.linkedin.com/in/surya-srekanth)
+- **Portfolio:** [suryasrekanth.vercel.app](https://suryasrekanth.vercel.app)
 
 ---
 
+## 📄 License
+
+This project is licensed under the **ISC License**. Feel free to use, modify, and distribute it as needed.
+
 <div align="center">
-  <sub>Developed by <b>Surya Srekanth</b> · Built with modern MERN Stack & Tailwind CSS</sub>
+  <sub>Engineered with ❤️ by <b>Surya Srekanth</b> • Built with React 19, Express 5, MongoDB Atlas & Tailwind CSS v4</sub>
 </div>
