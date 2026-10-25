@@ -31,7 +31,11 @@ router.get('/', async (req, res) => {
 
         // Filter by Status (Default to Active if not Specified)
         if (status && status !== 'All') {
-            query.status = status;
+            if (status === 'Active') {
+                query.status = { $in: ['Active', 'Claim Pending'] };
+            } else {
+                query.status = status;
+            }
         }
 
         //Search keyword in title, description, or room/zone
@@ -45,6 +49,7 @@ router.get('/', async (req, res) => {
 
         const items = await Item.find(query)
             .populate('reportedBy', 'name email department officeLocation')
+            .populate('claimDetails.claimedBy', 'name email phone department')
             .sort({ dateReported: -1 }); //Newest first
 
         res.status(200).json(items);
@@ -134,39 +139,51 @@ router.post('/', auth, async (req, res) => {
 });
 
 // ========================================================
-// 5. SUBMIT A CLAIM REQUEST (Anti-Theft Proof)
+// 5. SUBMIT A CLAIM OR FOUND REPORT
 // POST /api/items/:id/claim (Protected)
 // ========================================================
 router.post('/:id/claim', auth, async (req, res) => {
     try {
-        const { claimNote } = req.body;
+        const { claimNote, contactPhone } = req.body;
 
         if (!claimNote || claimNote.trim() === '') {
-            return res.status(400).json({ message: 'Please Provide Proof of Ownership' });
+            return res.status(400).json({ message: 'Please provide note details' });
         }
 
         const item = await Item.findById(req.params.id);
         if (!item) {
-            return res.status(404).json({ message: 'Item  Not Found' });
+            return res.status(404).json({ message: 'Item Not Found' });
         }
 
         if (item.status === 'Returned') {
-            return res.status(400).json({ message: 'This item has already been returned' });
+            return res.status(400).json({ message: 'This item has already been marked as returned' });
+        }
+
+        if (item.reportedBy.toString() === req.user.id) {
+            return res.status(400).json({ message: 'You cannot submit a request on your own reported item' });
         }
 
         // Update claim details and status
         item.status = 'Claim Pending';
         item.claimDetails = {
             claimedBy: req.user.id,
-            claimNote,
+            claimNote: claimNote.trim(),
+            contactPhone: contactPhone ? contactPhone.trim() : '',
             claimDate: new Date(),
         };
 
         await item.save();
-        res.status(200).json({ message: 'Claim request submitted successfully', item });
+        await item.populate('claimDetails.claimedBy', 'name email phone department');
+        await item.populate('reportedBy', 'name email department officeLocation');
+
+        const successMessage = item.type === 'Lost'
+            ? 'Found request posted successfully! The owner has been notified.'
+            : 'Claim request submitted successfully!';
+
+        res.status(200).json({ message: successMessage, item });
     } catch (err) {
-        console.error('Claim Error:', err.message);
-        res.status(500).json({ message: 'Server error submitting claim' });
+        console.error('Claim/Found Request Error:', err.message);
+        res.status(500).json({ message: 'Server error submitting request' });
     }
 });
 

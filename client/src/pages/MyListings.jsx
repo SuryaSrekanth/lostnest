@@ -86,19 +86,41 @@ const MyListings = () => {
                 </div>
                 <p className="text-xs text-slate-500 line-clamp-1">{item.description}</p>
                 
-                {/* Pending Claim Banner */}
+                {/* Pending Claim or Found Notification Banner */}
                 {item.status === 'Claim Pending' && item.claimDetails && (
-                  <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold text-amber-800">
-                      <ShieldAlert className="w-4 h-4 text-amber-600" />
-                      Pending Claim Verification Submitted:
+                  <div className={`mt-2 p-3 rounded-lg text-xs space-y-1.5 border ${
+                    item.type === 'Lost'
+                      ? 'bg-emerald-50/90 border-emerald-300'
+                      : 'bg-amber-50 border-amber-200'
+                  }`}>
+                    <div className="flex items-center gap-1.5 font-bold">
+                      {item.type === 'Lost' ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span className="text-emerald-900">🎉 Colleague Reported Finding Your Lost Item:</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
+                          <span className="text-amber-800">Pending Claim Verification Submitted:</span>
+                        </>
+                      )}
                     </div>
-                    <p className="text-slate-700 italic bg-white p-2 rounded border border-amber-100">
+                    <p className="text-slate-800 italic bg-white p-2.5 rounded border border-slate-200/80">
                       "{item.claimDetails.claimNote}"
                     </p>
-                    <p className="text-[11px] text-slate-500">
-                      Claimant: <span className="font-semibold">{item.claimDetails.claimedBy?.name}</span> ({item.claimDetails.claimedBy?.email})
-                    </p>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-600 pt-0.5">
+                      <span>
+                        {item.type === 'Lost' ? 'Found by' : 'Claimant'}: <strong className="text-slate-900">{item.claimDetails.claimedBy?.name || 'Colleague'}</strong>
+                        {item.claimDetails.claimedBy?.department && ` (${item.claimDetails.claimedBy.department})`}
+                      </span>
+                      {item.claimDetails.claimedBy?.email && (
+                        <span className="text-emerald-800">✉️ {item.claimDetails.claimedBy.email}</span>
+                      )}
+                      {item.claimDetails.contactPhone && (
+                        <span className="text-slate-800 font-semibold">📞 {item.claimDetails.contactPhone}</span>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

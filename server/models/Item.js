@@ -66,7 +66,7 @@ const itemSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
-    // Verification workflow for claiming expensive items
+    // Verification workflow for claiming expensive items or reporting found
     claimDetails: {
         claimedBy: {
             type: mongoose.Schema.Types.ObjectId,
@@ -75,7 +75,11 @@ const itemSchema = new mongoose.Schema({
         },
         claimNote: {
             type: String,
-            default: '', // Identifying Proof (e.g. "Sticker on back", "Lockscreen image")
+            default: '', // Identifying Proof or Handover Location Note
+        },
+        contactPhone: {
+            type: String,
+            default: '',
         },
         claimDate: {
             type: Date,

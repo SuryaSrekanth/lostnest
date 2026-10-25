@@ -52,11 +52,7 @@ const Home = () => {
     fetchItems();
   }, [fetchItems]);
 
-  const handleClaimClick = (item) => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+  const handleCardClick = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
@@ -147,19 +143,20 @@ const Home = () => {
             <ItemCard
               key={item._id}
               item={item}
-              onClaimClick={handleClaimClick}
+              onClaimClick={handleCardClick}
               onResolveClick={handleResolve}
             />
           ))}
         </div>
       )}
 
-      {/* Claim Proof Modal */}
+      {/* Item Detail & Claim / Found Notification Modal */}
       <ClaimModal
         item={selectedItem}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={fetchItems}
+        onResolve={handleResolve}
       />
     </div>
   );

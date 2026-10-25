@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Tag, ShieldCheck, CheckCircle } from 'lucide-react';
+import { MapPin, Calendar, Tag, ShieldCheck, CheckCircle, Handshake, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
@@ -11,7 +11,10 @@ const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
   const isOwner = user && user.id === (item.reportedBy?._id || item.reportedBy);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-emerald-900/10 overflow-hidden hover:shadow-md transition flex flex-col">
+    <div
+      onClick={() => onClaimClick && onClaimClick(item)}
+      className="bg-white rounded-xl shadow-sm border border-emerald-900/10 overflow-hidden hover:shadow-md hover:border-emerald-700/40 transition cursor-pointer flex flex-col group"
+    >
       
       {/* Image / Category Placeholder */}
       <div className="h-44 bg-slate-100 relative overflow-hidden flex items-center justify-center">
@@ -19,7 +22,7 @@ const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
           <img
             src={item.imageUrl}
             alt={item.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
           />
         ) : (
           <div className="flex flex-col items-center text-slate-400">
@@ -52,7 +55,11 @@ const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
                 : 'bg-white/90 text-slate-800 border-slate-200 backdrop-blur-sm'
             }`}
           >
-            {item.status}
+            {isClaimPending
+              ? isLost
+                ? 'Found Update Posted'
+                : 'Claim Pending'
+              : item.status}
           </span>
         </div>
       </div>
@@ -63,12 +70,25 @@ const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
           <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">
             {item.category}
           </span>
-          <h3 className="text-base font-bold text-slate-900 mt-0.5 line-clamp-1" title={item.title}>
+          <h3 className="text-base font-bold text-slate-900 mt-0.5 line-clamp-1 group-hover:text-emerald-900 transition" title={item.title}>
             {item.title}
           </h3>
           <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
             {item.description}
           </p>
+
+          {/* If a found update is posted on a Lost item, show a callout snippet */}
+          {isClaimPending && item.claimDetails?.claimNote && (
+            <div className="mt-2.5 p-2 bg-emerald-50/90 border border-emerald-200 rounded-lg text-xs">
+              <div className="flex items-center gap-1 font-bold text-emerald-900">
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>{isLost ? 'Colleague Found This!' : 'Claim In Review'}</span>
+              </div>
+              <p className="text-[11px] text-emerald-800 italic line-clamp-1 mt-0.5">
+                "{item.claimDetails.claimNote}"
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Workplace Location Coordinates */}
@@ -93,7 +113,7 @@ const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
           </div>
         </div>
 
-        {/* Action Button */}
+        {/* Action Button - Opens Modal Directly inside App */}
         <div className="mt-4 pt-2">
           {isReturned ? (
             <div className="flex flex-col items-center justify-center py-2 text-xs font-semibold text-emerald-900 bg-emerald-50/70 border border-emerald-100 rounded-lg">
@@ -106,34 +126,50 @@ const ItemCard = ({ item, onClaimClick, onResolveClick }) => {
           ) : isOwner ? (
             /* Direct Close button for the owner who reported it */
             <button
-              onClick={() => onResolveClick && onResolveClick(item._id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onResolveClick && onResolveClick(item._id);
+              }}
               className="w-full py-2 bg-emerald-950 hover:bg-emerald-900 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm ring-1 ring-emerald-800/60"
             >
               <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
               {isLost ? 'I Got It Back — Close Report' : 'Mark as Returned & Close'}
             </button>
+          ) : isClaimPending ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClaimClick(item);
+              }}
+              className="w-full py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 shadow-sm"
+            >
+              <ShieldAlert className="w-4 h-4 text-amber-600" />
+              {isLost ? 'Found Update Posted — View Info' : 'Claim Pending Review — View'}
+            </button>
           ) : isFound ? (
             /* Claim button for colleagues on Found items */
             <button
-              onClick={() => onClaimClick(item)}
-              disabled={isClaimPending}
-              className={`w-full py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition ${
-                isClaimPending
-                  ? 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed'
-                  : 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm'
-              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onClaimClick(item);
+              }}
+              className="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-sm"
             >
               <ShieldCheck className="w-4 h-4" />
-              {isClaimPending ? 'Claim Pending Review' : 'Claim This Item'}
+              Claim This Item
             </button>
           ) : (
-            /* Quick Contact Email link for colleagues on Lost items */
-            <a
-              href={`mailto:${item.contactEmail}?subject=Found your ${item.title}`}
-              className="block text-center py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 rounded-lg text-xs font-semibold transition"
+            /* IN-APP Found Notification button for Lost items (NO external mail app!) */
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClaimClick(item);
+              }}
+              className="w-full py-2 bg-emerald-800 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-sm ring-1 ring-emerald-600/40"
             >
-              ✉️ Contact Owner to Return
-            </a>
+              <Handshake className="w-4 h-4 text-emerald-300" />
+              I Found This Item — Notify Owner
+            </button>
           )}
         </div>
 
